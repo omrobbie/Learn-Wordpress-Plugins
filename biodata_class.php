@@ -8,8 +8,8 @@
 			$column = array(
 				'nip'		=> 'NIP',
 				'nama'		=> 'Nama',
-				'Alamat'	=> 'Alamat',
-				'Telp'		=> 'Telepon'
+				'alamat'	=> 'Alamat',
+				'telp'		=> 'Telepon'
 			);
 			return $column;
 		}
@@ -18,10 +18,18 @@
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'biodata';
 			$query = "select * from " . $table_name;
+
+			// aktifkan fungsi sort
+			$orderby = !empty($_GET['orderby']) ? $_GET['orderby'] : 'nama';
+			$order = !empty($_GET['order']) ? $_GET['order'] : 'asc';
+			$query .= " order by $orderby $order";
+			//---
+
 			$rows = $wpdb->get_results($query);
 			$columns = $this->get_columns();
 			$hidden = array();
-			$sortable = array();
+			// $sortable = array();
+			$sortable = $this->get_sortable_columns();
 
 			$this->_column_headers = array($columns, $hidden, $sortable);
 			$this->items = $rows;
@@ -29,6 +37,17 @@
 
 		function column_default($item, $column_name) {
 			return $item->column_name;
+		}
+
+		function get_sortable_columns() {
+			$sortable = array(
+				'foto'		=> array('foto', false),
+				'nip'		=> array('nip', false),
+				'nama'		=> array('nama', false),
+				'alamat'	=> array('alamat', false),
+				'telp'		=> array('telp', false)
+			);
+			return $sortable;
 		}
 	}
 ?>
