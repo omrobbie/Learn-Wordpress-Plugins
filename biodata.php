@@ -64,4 +64,8 @@
 		$sql = "drop table " . $table_name . ';';
 		$wpdb->query($sql);
 	}
+
+	// panggil halaman pengaturan biodata
+	define('ROOTDIR', plugin_dir_path(__FILE__));
+	require_once(ROOTDIR . 'biodata_tampil.php');
 ?>
