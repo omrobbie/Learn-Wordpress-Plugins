@@ -36,4 +36,32 @@
 			'bio_edit'
 		);
 	}
+
+	// tambahkan tabel saat plugin di aktifkan
+	register_activation_hook(__FILE__, 'bio_actived');
+	function bio_actived() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'biodata';
+
+		ob_start();
+		$sql = "create table if not exists " . $table_name . " (
+					nip int(12) not null,
+					nama varchar(50) not null,
+					alamat varchar(100) not null,
+					telp varchar(15) not null,
+					foto text not null,
+					primary key (nip)
+				);";
+		$wpdb->query($sql);
+	}
+
+	// hapus table saat plugin di non-aktifkan
+	register_uninstall_hook(__FILE__, 'bio_deactived');
+	function bio_deactivated() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'biodata';
+
+		$sql = "drop table " . $table_name . ';';
+		$wpdb->query($sql);
+	}
 ?>
