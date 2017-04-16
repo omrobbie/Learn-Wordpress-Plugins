@@ -26,7 +26,23 @@
 			$query .= " order by $orderby $order";
 			//---
 
+			// aktifkan pagination
+			$perpage = $this->get_items_per_page('data_per_page', 4);
+			$currentpage = $this->get_pagenum();
+			$totalitems = $wpdb->query($query);
+			$offset = ($currentpage-1) * $perpage;
+			$query .= " limit $offset, $perpage";
+			//---
+
 			$rows = $wpdb->get_results($query);
+
+			// set pagination
+			$this->set_pagination_args(array(
+				'total_items'	=> $totalitems,
+				'per_page'		=> $perpage
+			));
+			//---
+
 			$columns = $this->get_columns();
 			$hidden = array();
 			// $sortable = array();
