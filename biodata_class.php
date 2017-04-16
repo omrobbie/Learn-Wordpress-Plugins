@@ -9,7 +9,8 @@
 				'nip'		=> 'NIP',
 				'nama'		=> 'Nama',
 				'alamat'	=> 'Alamat',
-				'telp'		=> 'Telepon'
+				'telp'		=> 'Telepon',
+				'cb'		=> '<input type="checkbox" />'
 			);
 			return $column;
 		}
@@ -48,6 +49,25 @@
 				'telp'		=> array('telp', false)
 			);
 			return $sortable;
+		}
+
+		function column_nip($item) {
+			$actions = array(
+				'edit'		=> sprintf('<a href="?page=%s&nip=%s">Edit</a>', 'bio_edit', $item->nip),
+				'delete'	=> sprintf('<a href="?page=%s&action=delete&nip=%s">Hapus</a>', 'bio_mainmenu', $item->nip)
+			);
+			return sprintf('%1$s %2$s', $item->nip, $this->row_actions($actions));
+		}
+
+		function column_cb($item) {
+			return sprintf('<input type="checkbox" name="nip[]" value="%s" />', $item->nip);
+		}
+
+		function get_bulk_actions() {
+			$actions = array(
+				'delete'	=> 'Hapus'
+			);
+			return $actions;
 		}
 	}
 ?>
