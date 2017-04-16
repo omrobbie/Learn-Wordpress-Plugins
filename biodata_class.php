@@ -20,6 +20,13 @@
 			$table_name = $wpdb->prefix . 'biodata';
 			$query = "select * from " . $table_name;
 
+			// aktifkan fungsi pencarian
+			if(isset($_POST['s'])) {
+				$cari = $_POST['s'];
+				$query .= " where nip like '%$cari%' or nama like '%$cari%' or alamat like '%$cari%'";
+			}
+			//---
+
 			// aktifkan fungsi sort
 			$orderby = !empty($_GET['orderby']) ? $_GET['orderby'] : 'nama';
 			$order = !empty($_GET['order']) ? $_GET['order'] : 'asc';

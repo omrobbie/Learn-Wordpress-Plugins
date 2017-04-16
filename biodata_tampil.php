@@ -11,6 +11,10 @@
 			$tbbiodata->prepare_items();
 ?>
 			<form method="post">
+				<?php $tbbiodata->search_box('search', 'search_id'); ?>
+			</form>
+
+			<form method="post">
 				<?php $tbbiodata->display(); ?>
 			</form>
 		</div>
