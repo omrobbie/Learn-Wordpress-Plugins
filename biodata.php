@@ -57,6 +57,49 @@
 	}
 	//---
 
+	// aktifkan fungsi shortcode
+	add_shortcode('biodata', 'bio_shortcode');
+	function bio_shortcode($atts) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'biodata';
+?>
+		<table class="table stripped">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>Foto</th>
+					<th>NIP</th>
+					<th>Nama</th>
+					<th>Alamat</th>
+					<th>HP/Telp</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					$query = 'select * from ' . $table_name;
+					$data = $wpdb->get_results($query);
+					$no = 1;
+					foreach($data as $d) {
+				?>
+						<tr>
+							<td><?php echo $no; ?></td>
+							<td><img src="<?php echo $d->foto; ?>" width="200"></td>
+							<td><?php echo $d->nip; ?></td>
+							<td><?php echo $d->nama; ?></td>
+							<td><?php echo $d->alamat; ?></td>
+							<td><?php echo $d->telp; ?></td>
+						</tr>
+				<?php
+						$no++;
+					}
+				?>
+			</tbody>
+		</table>
+<?php
+		return ob_get_clean();
+	}
+	//---
+
 	// tambahkan tabel saat plugin di aktifkan
 	register_activation_hook(__FILE__, 'bio_actived');
 	function bio_actived() {
