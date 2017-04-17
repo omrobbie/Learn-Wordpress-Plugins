@@ -3,11 +3,78 @@
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'biodata';
 
+		// CRUD
+		$message = "";
+		if(isset($_POST['tambah'])) {
+			$tambah = $wpdb->insert(
+				$table_name,
+				array(
+					'nip'=>$_POST['nip'],
+					'nama'=>$_POST['nama'],
+					'alamat'=>$_POST['alamat'],
+					'telp'=>$_POST['telp'],
+					'foto'=>$_POST['foto']
+				),
+				array(
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%s'
+				)
+			);
+			if($tambah) $message = "Data berhasil di tambahkan";
+		} elseif(isset($_POST['edit'])) {
+			$update = $wpdb->update(
+				$table_name,
+				array(
+					'nama'=>$_POST['nama'],
+					'alamat'=>$_POST['alamat'],
+					'telp'=>$_POST['telp'],
+					'foto'=>$_POST['foto']
+				),
+				array('nip'=>$_POST['nip']),
+				array(
+					'%s',
+					'%s',
+					'%s',
+					'%s'
+				),
+				array('%s')
+			);
+			if($update) $message = "Data berhasil di edit";
+		} elseif(isset($_POST['action']) or isset($_POST['action2'])) {
+			if($_POST['action'] == 'delete' or $_POST['action2'] == 'delete') {
+				$arrnip = $_POST['nip'];
+				foreach($arrnip as $nip) {
+					$wpdb->query($wpdb->prepare('delete from ' . $table_name . ' where nip=%s', $nip));
+				}
+				$message = "Data berhasil di hapus";
+			}
+		} elseif(isset($_GET['action'])) {
+			if($_GET['action'] == 'delete') {
+				$hapus = $wpdb->query($wpdb->prepare('delete from ' . $table_name . ' where nip=%s', $_GET['nip']));
+				if($hapus) $message = "Data berhasil di hapus";
+			}
+		}
+		//---
+
 		$tbbiodata = new Table_biodata();
 ?>
 		<div class="wrap">
 			<h2>Biodata Guru <a href="?page=bio_input" class="add-new-h2">Tambah Data</a></h2>
 <?php
+			// tampilkan pesan CRUD $message
+			if($message!="") {
+?>
+				<div id="message" class="updated notice is-dismissible">
+					<p><?php $message; ?></p>
+					<button type="button" class="notice-dismiss"></button>
+				</div>
+<?php
+			}
+			//---
+
 			$tbbiodata->prepare_items();
 ?>
 			<form method="post">
