@@ -88,6 +88,58 @@
 <?php
 	}
 
+	function bio_edit() {
+		bio_get_image();
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'biodata';
+		$data = $wpdb->get_results($wpdb->prepare(
+			"select * from " . $table_name . " where nip=%s", $_GET['nip']
+		));
+
+		foreach($data as $d) {
+			$nip = $d->nip;
+			$nama = $d->nama;
+			$alamat = $d->alamat;
+			$telp = $d->telp;
+			$foto = $d->foto;
+		}
+?>
+		<div class="wrap">
+			<h2>Edit Biodata Guru</h2>
+			<form action="?page=bio_mainmenu" method="post">
+				<input type="hidden" name="nip" value="<?php echo $nip; ?>">
+				<table class="form-table">
+					<tbody>
+						<tr>
+							<th><label>Nama</label></th>
+							<td><input type="text" name="nama" value="<?php echo $nama; ?>"></td>
+						</tr>
+						<tr>
+							<th><label>Alamat</label></th>
+							<td><input type="text" name="alamat" value="<?php echo $alamat; ?>" size="40"></td>
+						</tr>
+						<tr>
+							<th><label>Telp</label></th>
+							<td><input type="text" name="telp" value="<?php echo $telp; ?>" size="60"></td>
+						</tr>
+						<tr>
+							<th><label>Foto</label></th>
+							<td>
+								<div id="tampil-foto">
+									<img src="<?php echo $foto; ?>" width="150">
+								</div>
+								<input type="text" name="foto" id="foto" size="40">
+								<input type="button" class="button pilih-foto" value="Pilih">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p><input type="submit" name="edit" class="button button-primary" value="Edit Data"></p>
+			</form>
+		</div>
+<?php
+	}
+
 	// memanggil class untuk menampilkan data dari database
 	require_once(ROOTDIR . 'biodata_class.php');
 ?>
