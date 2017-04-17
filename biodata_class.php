@@ -6,11 +6,12 @@
 	class Table_biodata extends WP_List_Table {
 		function get_columns() {
 			$column = array(
+				'cb'		=> '<input type="checkbox" />',
+				'foto'		=> 'Foto',
 				'nip'		=> 'NIP',
 				'nama'		=> 'Nama',
 				'alamat'	=> 'Alamat',
-				'telp'		=> 'Telepon',
-				'cb'		=> '<input type="checkbox" />'
+				'telp'		=> 'Telepon'
 			);
 			return $column;
 		}
@@ -80,6 +81,10 @@
 				'delete'	=> sprintf('<a href="?page=%s&action=delete&nip=%s">Hapus</a>', 'bio_mainmenu', $item->nip)
 			);
 			return sprintf('%1$s %2$s', $item->nip, $this->row_actions($actions));
+		}
+
+		function column_foto($item) {
+			return '<img src="' . $item->foto . '" width="100"';
 		}
 
 		function column_cb($item) {
