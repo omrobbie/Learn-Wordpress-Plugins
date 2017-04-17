@@ -21,8 +21,35 @@
 <?php
 	}
 
+	// aktifkan menu pemilihan foto
+	function bio_get_image() {
+		wp_enqueue_script('jquery');
+		wp_enqueue_media();
+?>
+		<script type="text/javascript">
+			jquery(document).ready(function($) {
+				$('.pilih-foto').click(function(e) {
+					e.preventDefault();
+					var image = wp.media({
+						title		: 'Pilih Foto',
+						multiple	: false
+					}).open()
+					.on('select', function(e) {
+						var uploaded_image = image.state().get('selection').first();
+						var image_url = uploaded_image.tojson().url;
+						$('#foto').val(image_url);
+						$('#tampil-foto').html('<img src="' + image_url + '" width="150">');
+					});
+				});
+			});
+		</script>
+<?php
+	}
+
 	// aktifkan menu tambah data
 	function bio_input() {
+		// gunakan media library
+		bio_get_image();
 ?>
 		<div class="wrap">
 			<h2>Tambah Biodata Guru</h2>
