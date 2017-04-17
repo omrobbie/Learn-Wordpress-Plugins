@@ -10,13 +10,15 @@
 
 	add_action('admin_menu', 'bio_untuk_menu');
 	function bio_untuk_menu() {
-		add_menu_page(
+		$hook = add_menu_page(
 			'Biodata Guru',
 			'Biodata Guru',
 			'activate_plugins',
 			'bio_mainmenu',
 			'bio_mainmenu'
 		);
+		// aktifkan screen options
+		add_action("load-$hook", 'bio_options');
 
 		add_submenu_page(
 			'bio_mainmenu',
@@ -36,6 +38,24 @@
 			'bio_edit'
 		);
 	}
+
+	// aktifkan screen options
+	function bio_options() {
+		global $tbbiodata;
+		$option = 'per_page';
+		$args = array(
+			'label'		=> 'Data Guru',
+			'default'	=> 5,
+			'option'	=> 'data_per_page'
+		);
+		add_screen_option($option, $args);
+		$tbbiodata = new Table_biodata;
+	}
+	add_filter('set-screen-option', 'bio_set_options', 10, 3);
+	function bio_set_options($status, $option, $value) {
+		return $value;
+	}
+	//---
 
 	// tambahkan tabel saat plugin di aktifkan
 	register_activation_hook(__FILE__, 'bio_actived');
