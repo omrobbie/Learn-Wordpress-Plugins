@@ -84,4 +84,42 @@
 			echo $after_widget;
 		}
 	}
+
+	// rapikan tampilan widget
+	add_action('wp_head', 'bio_css');
+	function bio_css() {
+?>
+		<style type="text/css">
+			.slidefoto {
+				margin: 10px auto;
+				overflow: hidden;
+				position: relative;
+			}
+			.slidefoto img {
+				position: absolute;
+				top: 0;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+<?php
+	}
+
+	add_action('wp_footer', 'bio_script');
+	function bio_script() {
+		wp_enqueue_script('jquery');
+?>
+		<script type="text/javascript">
+			(function($) {
+				setInterval(function() {
+					$('.slidefoto img:last').fadeOut('slow', function() {
+						$(this).remove();
+						$(this).prependTo('.slidefoto').fadeIn();
+					});
+				}, 5000);
+			})(jquery);
+		</script>
+<?php
+	}
+	//---
 ?>
